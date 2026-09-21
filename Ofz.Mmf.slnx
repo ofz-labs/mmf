@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Ofz.Mmf.Core/Ofz.Mmf.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Ofz.Mmf.Core.Tests/Ofz.Mmf.Core.Tests.csproj" />
+  </Folder>
+</Solution>
