@@ -1,0 +1,45 @@
+<Project>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MMF — Ortak MSBuild Ayarları
+       Bu dosya tüm alt projelere otomatik uygulanır.
+       Her projenin .csproj'unda tekrar yazılmasına gerek yoktur.
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <PropertyGroup>
+    <!-- ─── Hedef Framework ve Dil ─── -->
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+
+    <!-- ─── C# Dil Özellikleri ─── -->
+    <!-- Nullable reference types: null güvenliği için -->
+    <Nullable>enable</Nullable>
+    <!-- ImplicitUsings: System, System.Linq gibi yaygın using'ler otomatik -->
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- ─── Kod Kalitesi ─── -->
+    <!-- Uyarıları hata olarak değerlendir: kaliteyi zorunlu kılar -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- En güncel analyzer kuralları -->
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <!-- .NET SDK'nın yerleşik analyzer'ları -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <!-- .editorconfig'teki kod stili kurallarını build sırasında uygula -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!-- ─── Deterministic Build ─── -->
+    <!-- Aynı kaynak kodu her seferinde aynı binary'e dönüştür (reproducible builds) -->
+    <Deterministic>true</Deterministic>
+
+    <!-- ─── NuGet Paket Metadata ─── -->
+    <Authors>ofz-labs</Authors>
+    <Company>ofz-labs</Company>
+    <Product>MMF — Modular Monolith Framework</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/ofz-labs/mmf</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/ofz-labs/mmf</PackageProjectUrl>
+    <PackageTags>dotnet;framework;modular-monolith;di;dependency-injection</PackageTags>
+  </PropertyGroup>
+
+</Project>

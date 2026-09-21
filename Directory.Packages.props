@@ -1,0 +1,22 @@
+<Project>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MMF — Merkezi Paket Yönetimi (CPM)
+       Tüm NuGet paket sürümleri burada tanımlanır.
+       Projelerin .csproj dosyalarında sürüm belirtilmez; sadece
+       <PackageReference Include="..." /> yazılır.
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- ─── Test Paketleri ─── -->
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+</Project>
