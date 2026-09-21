@@ -1,0 +1,13 @@
+<Project>
+
+  <!-- Kök Directory.Build.props'u açıkça import et (yoksa yukarı doğru arama durur) -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- src/ altındaki projelere özel ayarlar -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+</Project>

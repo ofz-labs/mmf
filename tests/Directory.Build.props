@@ -1,0 +1,12 @@
+<Project>
+
+  <!-- Kök Directory.Build.props'u açıkça import et (yoksa yukarı doğru arama durur) -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- tests/ altındaki projelere özel ayarlar -->
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+</Project>
