@@ -1,0 +1,240 @@
+root = true
+
+# ═══════════════════════════════════════════════════════════════════
+# MMF — Modular Monolith Framework
+# Kod stili ve analyzer kuralları
+# ═══════════════════════════════════════════════════════════════════
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{cs,csx}]
+indent_size = 4
+quote_type = double
+
+# C# biçimlendirme
+dotnet_sort_system_directives_first = true
+
+# IDE0005 / CS8019: kullanılmayan using direktifleri
+# EnforceCodeStyleInBuild ile build sırasında uyarı olarak yüzeye çıkar
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.CS8019.severity = warning
+
+# ── Roslynator.Analyzers (RCS1xxx) ────────────────────────────────────────────
+# Temel seviye: sadece öneri. 'suggestion' seviyesi IDE'de ve build çıktısında görünür
+# ancak TreatWarningsAsErrors altında asla error'a yükselmez. Ağaçta temiz olduğu
+# doğrulanan kurallar aşağıda tek tek 'warning'e terfi ettirilir (burada uyarı == build hatası).
+dotnet_analyzer_diagnostic.category-Roslynator.severity = suggestion
+
+# Bilinçli MMF desenleriyle çakıştığı için kapatılan kurallar (kalıcı gürültü olurdu):
+#   RCS1102 — "sınıfı static yap": DI ile çözülen veya endpoint handler olarak kullanılan
+#             sınıflar non-static public olmalıdır.
+dotnet_diagnostic.RCS1102.severity = none
+#   RCS1170 — "read-only auto-property kullan": AggregateRoot/Entity sınıflarında
+#             { get; private set; } ile EF Core reflection üzerinden materialize edildiği
+#             için çakışır.
+dotnet_diagnostic.RCS1170.severity = none
+#   RCS1163 — "kullanılmayan parametre": DI factory metotları, method-group endpoint
+#             handler'ları ve framework callback'leri meşru şekilde bağlanmayan parametre taşır.
+dotnet_diagnostic.RCS1163.severity = none
+#   RCS1213 — "kullanılmayan üyeyi kaldır": EF `private Ctor()`, DI ile çözülen ve
+#             reflection ile çağrılan üyelerde yanlış pozitif üretir.
+dotnet_diagnostic.RCS1213.severity = none
+#   RCS1161 — "enum açık değer bildirmeli": ileride eklenecek enum analyzer kuralıyla
+#             doğrudan çelişir (sıralı redundant değerler yasaklanacak).
+dotnet_diagnostic.RCS1161.severity = none
+#   RCS1194 — "exception constructor'larını uygula": MMF domain exception'ları sealed ve
+#             tek şekillidir (id'siz bir ConversationNotFoundException anlamsızdır).
+#             Üç-constructor CA1032 deseni eski (serialization dönemi) bir yaklaşımdır.
+dotnet_diagnostic.RCS1194.severity = none
+#   RCS1201 — "method chaining kullan": özneldir; activity.SetTag().SetTag() gibi zincirler
+#             satır başına tek çağrıdan daha kötü okunur. Net okunabilirlik kaybı.
+dotnet_diagnostic.RCS1201.severity = none
+#   RCS1158 — "generic tipteki static üye tip parametresi kullanmalı": internal `const`
+#             backend identifier'larında tetiklenir. CA1000 mantığı (instance başına static
+#             state) const'lar için geçerli değildir — inline edilirler.
+dotnet_diagnostic.RCS1158.severity = none
+#   RCS1043 — "tek parçalı tipten 'partial' kaldır": source-generator tehlikesi.
+#             [LoggerMessage] ve [GeneratedRegex] partial gerektirir; analyzer üretilen
+#             parçayı göremeyebilir ve gerekli modifier'ı silebilir.
+dotnet_diagnostic.RCS1043.severity = none
+#   RCS1124 — "local değişkeni inline et": volatile-read semantiğini belgeleyen isimli
+#             `snapshot` local'larını kaldırır ve `(MemoryStream)new()` tarzı cast'ler
+#             üretir — öznel kazanç için net okunabilirlik kaybı.
+dotnet_diagnostic.RCS1124.severity = none
+#   RCS1237 — Roslynator tarafından kendisi deprecated edildi ("RCS1254 kullanın").
+dotnet_diagnostic.RCS1237.severity = none
+#   RCS1241 — "IEqualityComparer'ı IEqualityComparer<T> yanında uygula": fixer'ı,
+#             ValueObject (çekirdek domain temel tipi) üzerine non-generic
+#             System.Collections.IEqualityComparer'ı `new public bool Equals(object, object)`
+#             + boş mesajlı throw'lar ile ekler — API/semantik değişiklik.
+dotnet_diagnostic.RCS1241.severity = none
+
+# XML dokümantasyon yorumu tamlığı ailesi — mevcut `NoWarn CS1591` (eksik XML yorum)
+# ile tutarlı kalmak için kapatıldı: framework tam XML doc zorunlu kılmıyor,
+# bu nedenle <param>/<typeparam>/<exception> etiketlerini talep etmek saf gürültüdür.
+# (Satır başına bir kural, satır içi yorum yok — EditorConfig sondaki metni değer sayar.)
+# RCS1140: dokümantasyon yorumuna <exception> ekle
+dotnet_diagnostic.RCS1140.severity = none
+# RCS1141: dokümantasyon yorumuna <param> ekle
+dotnet_diagnostic.RCS1141.severity = none
+# RCS1142: dokümantasyon yorumuna <typeparam> ekle
+dotnet_diagnostic.RCS1142.severity = none
+# RCS1181: yorumu dokümantasyon yorumuna dönüştür
+dotnet_diagnostic.RCS1181.severity = none
+# RCS1139: dokümantasyon yorumuna summary elemanı ekle
+dotnet_diagnostic.RCS1139.severity = none
+# RCS1226: dokümantasyon yorumuna paragraf ekle
+dotnet_diagnostic.RCS1226.severity = none
+# RCS1243: yorumdaki tekrarlı kelime — meşru tekrar eden token'ları bozar,
+# örn. "XXX XXX XXX" SIN maskesi "XXX XXX"a düşer. Sessiz bir dokümantasyon hatası,
+# doküman tamlığı değil.
+dotnet_diagnostic.RCS1243.severity = none
+
+# RCS1217 — "interpolated string'i concatenation'a çevir": terfi ettirilen RCS1267'nin
+# (interpolation tercih edilir) tam tersi. Çelişkili bir çift oluşturmamak için kapatıldı.
+dotnet_diagnostic.RCS1217.severity = none
+
+# RCS1090 (ConfigureAwait ekle) suggestion seviyesinde tutuluyor: kütüphane kodu için
+# doğru ama endpoint ve test projelerinde gürültü — global olarak terfi ETTİRMEYİN.
+# Testler aşağıda sessize alıyor.
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_indent_case_contents = true
+csharp_indent_switch_labels = true
+csharp_space_after_cast = false
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_style_var_for_built_in_types = false:warning
+csharp_style_var_when_type_is_apparent = true:warning
+csharp_style_var_elsewhere = false:warning
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_prefer_braces = true:warning
+
+# İsimlendirme kuralları
+dotnet_naming_rule.interface_should_begin_with_i.severity = warning
+dotnet_naming_rule.interface_should_begin_with_i.symbols = interface
+dotnet_naming_rule.interface_should_begin_with_i.style = begins_with_i
+dotnet_naming_symbols.interface.applicable_kinds = interface
+dotnet_naming_style.begins_with_i.required_prefix = I
+dotnet_naming_style.begins_with_i.capitalization = pascal_case
+
+dotnet_naming_rule.types_should_be_pascal_case.severity = warning
+dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case_style
+dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+
+# ── Roslynator: tüm repoda warning seviyesine terfi ettirilen kurallar ─────────
+# Bunlar tüm src/ VE tests/ projelerinde temizlendi ve artık zorunlu
+# (TreatWarningsAsErrors altında bir uyarı == build hatası). Bir kuralı buraya
+# terfi ettirmeden önce `dotnet format analyzers <proje> --diagnostics RCSxxxx`
+# ile her projede sıfır kalan sonuç raporladığından emin ol — testler dahil.
+[*.{cs,csx}]
+# RCS1214: gereksiz interpolated string ($"literal" — boşluksuz → "literal")
+dotnet_diagnostic.RCS1214.severity = warning
+# RCS1192: gereksiz verbatim string literal (@"kaçış-yok" → "kaçış-yok")
+dotnet_diagnostic.RCS1192.severity = warning
+# RCS1146: conditional access kullan (null-check + üye erişimi → ?.)
+dotnet_diagnostic.RCS1146.severity = warning
+# RCS1118: local değişkeni const olarak işaretle (hiç yeniden atanmayan, sabit başlatıcı)
+dotnet_diagnostic.RCS1118.severity = warning
+# RCS1085: auto-implemented property kullan (backing field + expression-body getter → { get; })
+dotnet_diagnostic.RCS1085.severity = warning
+# RCS1077: LINQ'i optimize et (List<T>.Select(f).ToList() → List<T>.ConvertAll(f))
+dotnet_diagnostic.RCS1077.severity = warning
+# RCS1197: StringBuilder.Append/AppendLine'i optimize et (ara string.Join alloc'ını önler)
+dotnet_diagnostic.RCS1197.severity = warning
+# RCS1123: gerektiğinde parantez ekle (*-in-+ gruplaması; öncelik değişmez)
+dotnet_diagnostic.RCS1123.severity = warning
+# RCS1205: named argümanları parametre bildirim sırasına göre sırala
+dotnet_diagnostic.RCS1205.severity = warning
+# RCS1021: expression-bodied lambda kullan (tek ifadeli blok → =>)
+dotnet_diagnostic.RCS1021.severity = warning
+# RCS1251: gereksiz süslü parantezleri kaldır (boş tip gövdesi → ;)
+dotnet_diagnostic.RCS1251.severity = warning
+# RCS1073: gereksiz if'i return ifadesine çevir
+dotnet_diagnostic.RCS1073.severity = warning
+# RCS1221: 'as' + null kontrolü yerine pattern matching kullan
+dotnet_diagnostic.RCS1221.severity = warning
+# RCS1235: dictionary 'Add' çağrısını optimize et
+dotnet_diagnostic.RCS1235.severity = warning
+# RCS1249: gereksiz null-forgiving operatörünü (!) kaldır
+dotnet_diagnostic.RCS1249.severity = warning
+# RCS1212: gereksiz atamayı kaldır
+dotnet_diagnostic.RCS1212.severity = warning
+# RCS1206: koşullu ifade yerine conditional access kullan
+dotnet_diagnostic.RCS1206.severity = warning
+# RCS1084: koşullu ifade yerine coalesce expression (??) kullan
+dotnet_diagnostic.RCS1084.severity = warning
+# RCS1173: 'if' yerine coalesce expression kullan
+dotnet_diagnostic.RCS1173.severity = warning
+# RCS1006: 'else' ile iç içe 'if'i birleştir (→ else if)
+dotnet_diagnostic.RCS1006.severity = warning
+# RCS1196: extension metodu instance metodu olarak çağır
+dotnet_diagnostic.RCS1196.severity = warning
+# RCS1267: string.Concat yerine string interpolation kullan
+dotnet_diagnostic.RCS1267.severity = warning
+# RCS1261: kaynak asenkron dispose edilebilir (async metotlarda using → await using).
+# Not: implicit DisposeAsync await ConfigureAwait(false) taşımaz ama ASP.NET Core
+# altında (sync context yok) bu önemsizdir ve hiçbir analyzer işaretlemez.
+dotnet_diagnostic.RCS1261.severity = warning
+# RCS1047: asenkron olmayan metottan 'Async' sonekini kaldır (senkron handler/yardımcılar)
+dotnet_diagnostic.RCS1047.severity = warning
+# RCS1151: gereksiz cast'i kaldır
+dotnet_diagnostic.RCS1151.severity = warning
+# RCS1112: 'Enumerable.Where' zincirini tek predicate'te birleştir
+dotnet_diagnostic.RCS1112.severity = warning
+# RCS1199: gereksiz null kontrolünü kaldır (zaten non-null garanti edilmiş)
+dotnet_diagnostic.RCS1199.severity = warning
+# RCS1247: hatalı biçimli dokümantasyon-yorumu etiketini düzelt (tamlık kurallarından farklı)
+dotnet_diagnostic.RCS1247.severity = warning
+# RCS1135: [Flags] enum'da sıfır değerli üye bildir
+dotnet_diagnostic.RCS1135.severity = warning
+# RCS1093: dosya kod içermiyor (boş/sadece yorum içeren derleme birimi)
+dotnet_diagnostic.RCS1093.severity = warning
+# RCS1015: nameof operatörünü kullan
+dotnet_diagnostic.RCS1015.severity = warning
+# RCS1033: boolean karşılaştırmadaki gereksiz '== true' ifadesini kaldır
+dotnet_diagnostic.RCS1033.severity = warning
+# RCS1049: boolean karşılaştırmayı basitleştir ('x == false' → '!x')
+dotnet_diagnostic.RCS1049.severity = warning
+# RCS1097: gereksiz 'ToString' çağrısını kaldır
+dotnet_diagnostic.RCS1097.severity = warning
+
+[*.{csproj,props,targets}]
+indent_size = 2
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab
+
+# Test projeleri: ConfigureAwait(false) bir kütüphane kodu geleneğidir, test geleneği değil.
+[tests/**.cs]
+dotnet_diagnostic.RCS1090.severity = none
+
+# S107: Metotlar çok fazla parametreye sahip olmamalı
+# DTO record'ları için sessize alındı — positional parametreler veri sözleşmesidir, kod kokusu değil
+[*Response.cs]
+dotnet_diagnostic.S107.severity = none
+
+[*Request.cs]
+dotnet_diagnostic.S107.severity = none
+
+[*Command.cs]
+dotnet_diagnostic.S107.severity = none
+
+[*Query.cs]
+dotnet_diagnostic.S107.severity = none
