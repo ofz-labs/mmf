@@ -1,0 +1,85 @@
+name: 🐛 Hata Bildirimi
+description: Beklenmeyen bir davranış veya hata bildir
+title: "[Bug]: "
+labels: ["type:bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hata bildirdiğiniz için teşekkürler. Lütfen hatayı yeniden üretmek
+        için gereken minimum bilgiyi paylaşın.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Hata Açıklaması
+      description: Hata nedir, hangi durumda ortaya çıkıyor?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Yeniden Üretme Adımları
+      description: Hatayı tetikleyen adımlar
+      value: |
+        1. Şu komutu çalıştır: `...`
+        2. Şu girdiyi ver: `...`
+        3. Şu hatayı al: `...`
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Beklenen Davranış
+      description: Ne olmasını bekliyordunuz?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Gerçek Davranış
+      description: Ne oldu? Hata mesajı veya stack trace varsa yapıştırın.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Sürüm
+      description: Hangi MMF sürümünü kullanıyorsunuz?
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: dotnet-version
+    attributes:
+      label: .NET Sürümü
+      description: "`dotnet --version` çıktısı"
+      placeholder: "10.0.400"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: İşletim Sistemi
+      options:
+        - Windows
+        - Linux
+        - macOS
+        - Diğer
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Ek Bilgi
+      description: Log, ekran görüntüsü, ilgili issue'lar
+    validations:
+      required: false
