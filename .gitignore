@@ -7,7 +7,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
+# ─────────────────────────────────────────────
 # Build results
+# ─────────────────────────────────────────────
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -22,36 +24,178 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+[Oo]ut/
+[Pp]ublish/
+artifacts/
+*.dll
+*.exe
+*.pdb
+*.deps.json
+*.runtimeconfig.json
 
-# .NET Core
+# ─────────────────────────────────────────────
+# .NET Core / SDK
+# ─────────────────────────────────────────────
 project.lock.json
 project.fragment.lock.json
-artifacts/
+*.deps.json
+*.runtimeconfig.json
+*.nuget.props
+*.nuget.targets
 
+# ─────────────────────────────────────────────
 # ASP.NET Scaffolding
+# ─────────────────────────────────────────────
 ScaffoldingReadMe.txt
 
+# ─────────────────────────────────────────────
 # NuGet Packages
+# ─────────────────────────────────────────────
 *.nupkg
-# NuGet Symbol Packages
 *.snupkg
+*.nuget.props
+*.nuget.targets
+packages/
+!packages/build/
+!packages/*.props
 
-# dotenv environment variables file
-.env
-
-# Others
-~$*
-*~
-CodeCoverage/
-
-# MSBuild Binary and Structured Log
-*.binlog
-
-# MSTest test Results
+# ─────────────────────────────────────────────
+# Test Results & Coverage
+# ─────────────────────────────────────────────
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
-
-# NUnit
-*.VisualState.xml
 TestResult.xml
 nunit-*.xml
+*.trx
+coverage*.json
+coverage*.xml
+coverage*.info
+coverage*.cobertura.xml
+*.coverage
+*.coveragexml
+[Cc]overage[Rr]eport/
+codecov/
+coverlet/
+
+# ─────────────────────────────────────────────
+# BenchmarkDotNet
+# ─────────────────────────────────────────────
+BenchmarkDotNet.Artifacts/
+*.benchmark.json
+
+# ─────────────────────────────────────────────
+# Visual Studio
+# ─────────────────────────────────────────────
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.rsuser
+*.buildlog
+*.tlog
+*.cache
+.vscache/
+
+# ─────────────────────────────────────────────
+# JetBrains Rider / IntelliJ
+# ─────────────────────────────────────────────
+.idea/
+*.sln.iml
+*.suo
+_modules/
+*.DotSettings.user
+
+# ─────────────────────────────────────────────
+# VS Code
+# ─────────────────────────────────────────────
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+*.code-workspace
+.history/
+*.vsix
+
+# ─────────────────────────────────────────────
+# Docker
+# ─────────────────────────────────────────────
+docker-compose.override.yml
+.dockerignore
+
+# ─────────────────────────────────────────────
+# Azure / Publish
+# ─────────────────────────────────────────────
+*.pubxml
+*.pubxml.user
+PublishProfiles/
+.publishsettings
+*.azurePubxml
+
+# ─────────────────────────────────────────────
+# Environment / Local Config
+# ─────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+appsettings.Development.json
+appsettings.Local.json
+*.local.json
+
+# ─────────────────────────────────────────────
+# OS Files
+# ─────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ─────────────────────────────────────────────
+# Merge / Rebase / Backup
+# ─────────────────────────────────────────────
+*.bak
+*.orig
+*.tmp
+*.temp
+*.swp
+*~*
+~$*
+*.rej
+
+# ─────────────────────────────────────────────
+# MSBuild
+# ─────────────────────────────────────────────
+*.binlog
+*.log
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# ─────────────────────────────────────────────
+# Misc
+# ─────────────────────────────────────────────
+*.pidb
+*.svclog
+*.scc
+*.tmp_proj
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings
+*.log
+*.bak
+*.ncrunch*
+*.*crunch*.tmp
+_dotCover/
+*.dotCover
+*.dotTrace
+*.dotMemory
+*.dotMemory.*
