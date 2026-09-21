@@ -1,0 +1,63 @@
+name: 🚀 Yeni Özellik / Görev
+description: Yeni bir özellik, iyileştirme veya görev öner
+title: "[F<faz>-<no>] "
+labels: ["type:feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bu formu doldurduğunuz için teşekkürler. Lütfen aşağıdaki alanları
+        eksiksiz doldurun. **Definition of Done** olmadan issue kabul edilmez.
+
+  - type: input
+    id: phase-issue
+    attributes:
+      label: Faz / Issue No
+      description: "Örnek: F1-04"
+      placeholder: "F1-04"
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Amaç
+      description: Bu görev neden var? 1-2 cümlelik özet.
+      placeholder: "Framework'ün modül soyutlamasını tanımlamak..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Bağımlılıklar
+      description: Hangi issue'ya bağlı, hangilerini blokluyor?
+      value: |
+        - **Depends on**: #
+        - **Blocks**: #
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: Definition of Done
+      description: Bu görev hangi koşullar sağlandığında "bitti" sayılır?
+      value: |
+        - [ ] Kod yazıldı
+        - [ ] Unit testler eklendi
+        - [ ] `dotnet build` hatasız
+        - [ ] `dotnet test` yeşil
+        - [ ] PR açıldı ve main'e merge edildi
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notlar
+      description: Tasarım kararları, özel durumlar, referanslar
+      placeholder: "Interface yerine abstract class kullanma kararı..."
+    validations:
+      required: false
