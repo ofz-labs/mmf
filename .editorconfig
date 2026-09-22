@@ -208,6 +208,14 @@ dotnet_diagnostic.RCS1033.severity = warning
 dotnet_diagnostic.RCS1049.severity = warning
 # RCS1097: gereksiz 'ToString' çağrısını kaldır
 dotnet_diagnostic.RCS1097.severity = warning
+# Test projeleri: ConfigureAwait(false) bir kütüphane kodu geleneğidir, test geleneği değil.
+[tests/**.cs]
+dotnet_diagnostic.RCS1090.severity = none
+# Test metot isimlerinde alt çizgi yaygın bir kalıptır (Metot_Senaryo_BeklenenDavranış)
+dotnet_diagnostic.CA1707.severity = none
+# Exception fırlatmayı test eden Action'lar kullanılmayan instance uyarısı verir
+dotnet_diagnostic.CA1806.severity = none
+
 
 [*.{csproj,props,targets}]
 indent_size = 2

@@ -7,6 +7,10 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- IDE0005 (gereksiz using) build sırasında çalışsın -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- CS1591: Test kodunda XML doc yorumu zorunlu değil -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
 </Project>
