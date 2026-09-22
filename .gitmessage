@@ -1,0 +1,47 @@
+# ─────────────────────────────────────────────────────────────────
+# COMMIT MESSAGE ŞABLONU
+# ─────────────────────────────────────────────────────────────────
+# Başlık: 50 karakter ideal, 72 maksimum. İmperatif kip, nokta yok.
+# ─────────────────────────────────────────────────────────────────
+
+<type>(<scope>): <subject>
+
+# ─────────────────────────────────────────────────────────────────
+# NEDEN bu değişiklik yapıldı? (Subject'ten bir boş satır sonra)
+# ─────────────────────────────────────────────────────────────────
+
+
+# ─────────────────────────────────────────────────────────────────
+# NE değişti? (Madde madde, gerekirse)
+# ─────────────────────────────────────────────────────────────────
+
+
+# ─────────────────────────────────────────────────────────────────
+# Footer: Closes #X, BREAKING CHANGE: ...
+# ─────────────────────────────────────────────────────────────────
+Closes #
+
+# ─── Tipler ───
+# feat     : Yeni özellik
+# fix      : Hata düzeltme
+# docs     : Sadece dokümantasyon
+# chore    : Yapılandırma, build, tooling
+# refactor : Davranış değişmeden yeniden düzenleme
+# test     : Test ekleme/düzeltme
+# perf     : Performans iyileştirmesi
+# ci       : CI/CD değişiklikleri
+# build    : Build sistemi değişiklikleri
+#
+# ─── Kapsamlar (scope) ───
+# core         : Modül sistemi, DI, yaşam döngüsü
+# persistence  : EF Core, DbContext
+# security     : AuthN/AuthZ
+# messaging    : CQRS, Wolverine
+# infrastructure : CI/CD, build, tooling
+#
+# ─── Kurallar ───
+# - Başlık imperatif kip: "add", "fix" (added, fixed değil)
+# - Başlık küçük harfle başlasın (type ve scope hariç)
+# - Başlıkta nokta yok
+# - Gövde 72 karakterde sarılsın
+# ─────────────────────────────────────────────────────────────────
