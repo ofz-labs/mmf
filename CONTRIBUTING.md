@@ -79,12 +79,96 @@ Format: `<type>/<kısa-açıklama>`
 Projede **Conventional Commits** standardı kullanılır. Format:
 
 ```
-<type>(<scope>): <description>
+<type>(<scope>): <subject>
 
-[opsiyonel gövde]
+<body>
 
-[opsiyonel footer]
+<footer>
 ```
+
+### Yapı
+
+| Bölüm | Zorunlu mu? | Açıklama |
+|---|---|---|
+| **Subject** | ✅ Zorunlu | Başlık — 50 karakter ideal, 72 maksimum |
+| **Body** | ✅ Zorunlu (anlamlı değişikliklerde) | Neden ve ne yapıldı |
+| **Footer** | ⚠️ Issue varsa | `Closes #X`, `BREAKING CHANGE:` |
+
+### Subject (Başlık)
+
+- İmperatif kip: **"add"**, "added" değil
+- Küçük harfle başla (type ve scope hariç)
+- Nokta koyma sona
+- 50 karakter ideal, 72 maksimum
+
+```
+feat(core): add MmfModule abstract class
+fix(loader): handle circular dependency correctly
+docs: update README with usage example
+```
+
+### Body (Gövde)
+
+Subject'ten **bir boş satır** sonra başlar. İki amaca hizmet eder:
+
+1. **NEDEN** bu değişiklik yapıldı? (karar gerekçesi)
+2. **NE** değişti? (madde madde, gerekirse)
+
+**Örnek — Yeni sınıf ekleme:**
+```
+feat(core): add MmfException with three constructors
+
+Framework'ün fırlatacağı tüm exception'ların ortak atası.
+Kullanıcılar catch (MmfException) yazarak framework hatalarını
+diğer .NET exception'larından ayırt edebilir.
+
+- Parameterless: varsayılan exception
+- Message: hata mesajı ile
+- Message + InnerException: hata zinciri için
+
+Closes #5
+```
+
+**Örnek — Mimari karar:**
+```
+chore: adopt central package management
+
+NuGet paket sürümlerini 10+ projede tek tek güncellemek
+sürdürülemez hale geliyordu. CPM ile sürümler tek yerden
+yönetiliyor ve transitive dependency çakışmaları önleniyor.
+
+- Directory.Packages.props eklendi
+- Tüm .csproj'lardan Version attribute'ları kaldırıldı
+
+Closes #4
+```
+
+**Örnek — Bug fix:**
+```
+fix(loader): prevent duplicate module registration
+
+Aynı modül iki farklı modülden referans aldığında iki kez
+yükleniyordu. HashSet ile dedupe edilerek düzeltildi.
+
+Closes #8
+```
+
+**Body ne zaman atlanabilir?**
+- Küçük düzeltmeler (typo, whitespace)
+- Başlık zaten yeterince açıklayıcıysa (nadir)
+
+**Body ne zaman zorunlu?**
+- Yeni sınıf/metot ekleme
+- Mimari karar içeren değişiklik
+- Bug fix — "neden böyle bir hata vardı, nasıl çözüldü"
+- Refactor — "neden bu refactor gerekliydi"
+- Breaking change — her zaman
+
+### Footer
+
+- `Closes #X` — Issue'yu otomatik kapatır
+- `Refs #X` — Issue'ya referans verir (kapatmaz)
+- `BREAKING CHANGE: <açıklama>` — Geriye uyumsuz değişiklik
 
 ### Tipler
 
@@ -100,23 +184,52 @@ Projede **Conventional Commits** standardı kullanılır. Format:
 | `ci` | CI/CD değişiklikleri |
 | `build` | Build sistemi değişiklikleri |
 
-### Örnekler
+### Şablon Kullanımı
 
+Bu repoda `.gitmessage` şablonu aktiftir. `git commit` yazdığında
+editör (VS Code) otomatik açılır ve şablon yüklenir. `#` ile başlayan
+satırlar yorumdur — commit mesajına dahil edilmez.
+
+```bash
+git add .
+git commit          # ← Editör açılır, .gitmessage yüklenir
 ```
-feat(core): add MmfModule abstract class
-fix(loader): handle circular dependency correctly
-docs: update README with usage example
-chore: bump Roslynator to 4.13.0
-test(loader): add cycle detection tests
+
+Şablonu ilk kez kullanıyorsanız, Git'e kaydetmeniz gerekebilir:
+
+```bash
+git config commit.template .gitmessage
+git config core.editor "code --wait"
 ```
 
-### Kurallar
+### Kötü vs İyi Commit Örneği
 
-- **İmperatif kip** kullanın: "ekle" (`add`), "ekledim" değil
-- **Küçük harf** ile başlayın (type ve scope hariç)
-- **Nokta koymayın** sona
-- **50 karakter** başlık için ideal, 72'yi geçmesin
-- Gövde gerekliyse, bir boş satır bırakıp yazın
+**❌ Kötü (belirsiz başlık):**
+```
+chore: update files
+```
+(Neden? Ne değişti? Belirsiz.)
+
+**❌ Kötü (body'siz, bağlam yok):**
+```
+feat(core): add MmfException
+```
+(Neden bu sınıf? Nasıl çalışır? Hangi issue? Belirsiz.)
+
+**✅ İyi (başlık + body + footer):**
+```
+feat(core): add MmfException with three constructors
+
+Framework'ün fırlatacağı tüm exception'ların ortak atası.
+Kullanıcılar catch (MmfException) yazarak framework hatalarını
+diğer .NET exception'larından ayırt edebilir.
+
+- Parameterless: varsayılan exception
+- Message: hata mesajı ile
+- Message + InnerException: hata zinciri için
+
+Closes #5
+```
 
 ## Pull Request Süreci
 
@@ -133,7 +246,7 @@ git rebase main
 
 - Küçük, mantıksal commit'ler halinde ilerleyin
 - Her commit **tek bir şey** yapsın
-- Commit mesajları Conventional Commits formatında olsun
+- Commit mesajları Conventional Commits formatında olsun (body dahil)
 
 ### 3. Testleri çalıştırın
 
@@ -166,13 +279,29 @@ GitHub'da **Compare & pull request** butonu çıkacak. PR açılırken:
 - **Squash and merge** veya **Rebase and merge** kullanılır
 - **Merge commit yasaktır** (ruleset kuralı)
 
+### 7. Merge sonrası temizlik
+
+PR merge edildikten sonra:
+
+```bash
+# GitHub'da "Delete branch" butonuna basın (veya terminalden)
+git push origin --delete your-branch
+
+# Lokal main'i güncelleyin
+git checkout main
+git pull origin main
+
+# Lokal branch'i silin
+git branch -d your-branch
+```
+
 ## Kod Stili
 
 Tüm kod stili kuralları `.editorconfig` dosyasında tanımlıdır. IDE'niz bu kuralları otomatik uygular. Özet:
 
 - **Indent**: 4 boşluk (C#), 2 boşluk (XML, YAML, JSON)
 - **Satır sonu**: LF
-- **`var` kullanımı**: Tip açıkça belli olduğunda
+- **`var` kullanımı**: Tip açıkça belli olduğunda (örn. `new List<string>()`)
 - **Süslü parantez**: Zorunlu (tek satır bile olsa)
 - **`using` sıralaması**: `System.*` en üstte
 - **Namespace**: File-scoped (`namespace X;`) — blok-scoped değil
@@ -193,10 +322,52 @@ Projede şu analyzer'lar aktiftir:
 
 - **Unit testler** her yeni özellik için zorunlu
 - **xUnit** framework'ü kullanılır
-- **FluentAssertions** ile assertion yazılır
+- **AwesomeAssertions** ile assertion yazılır (FluentAssertions 8.x lisans değişikliği nedeniyle AwesomeAssertions'a geçilmiştir)
 - Test ismi: `<Metot>_<Senaryo>_<BeklenenDavranış>`
+  - Örnek: `MessageConstructor_SetsMessage`
   - Örnek: `LoadModules_WithCircularDependency_ThrowsException`
+- Test sınıfları `public sealed class` olmalı (kalıtım yok)
 - **Coverage hedefi**: Yeni kod için %80+
+
+### Test Dosyası Başlığı
+
+Her test dosyası, neyi test ettiğini açıklayan bir başlık yorumu ile başlar:
+
+```csharp
+// =============================================================================
+// MmfExceptionTests
+//
+// Amaç: MmfException sınıfının constructor'larının ve kalıtım ilişkisinin
+//       doğru çalıştığını doğrulamak.
+//
+// Yaklaşım: Arrange-Act-Assert deseniyle, her constructor için ayrı test.
+// =============================================================================
+```
+
+### Örnek Test
+
+```csharp
+using AwesomeAssertions;
+using Ofz.Mmf.Core.Exceptions;
+
+namespace Ofz.Mmf.Core.Tests.Exceptions;
+
+public sealed class MmfExceptionTests
+{
+    [Fact]
+    public void MessageConstructor_SetsMessage()
+    {
+        // Arrange
+        const string message = "Bir şeyler ters gitti";
+
+        // Act
+        var exception = new MmfException(message);
+
+        // Assert
+        exception.Message.Should().Be(message);
+    }
+}
+```
 
 Testleri çalıştırın:
 ```bash
@@ -210,7 +381,6 @@ dotnet test Ofz.Mmf.slnx --collect:"XPlat Code Coverage"
 
 ## Sorularınız mı Var?
 
-- **Sorular için**: [Discussions](https://github.com/ofz-labs/mmf/discussions) (henüz aktif değil — issue açabilirsiniz)
 - **Hata bildirimi**: [Bug template](https://github.com/ofz-labs/mmf/issues/new?template=bug.yml)
 - **Özellik önerisi**: [Feature template](https://github.com/ofz-labs/mmf/issues/new?template=feature.yml)
 
